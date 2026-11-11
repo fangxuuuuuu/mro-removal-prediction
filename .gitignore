@@ -1,6 +1,3 @@
-# data artifacts are distributed via Google Drive, not the repo
-data/*.csv
-data/*.zip
 
 # python
 __pycache__/

@@ -1,5 +1,11 @@
 # Unscheduled Component Removal Prediction — PoC Report
 
+> **Submission**
+> - **Code repository:** https://github.com/fangxuuuuuu/mro-removal-prediction
+> - **Mock dataset (CSV + data dictionary, zip):** https://drive.google.com/file/d/1_sMO_Ce7rHH3VZfni8CRwUk4ODPWMjPh/view?usp=sharing
+> - Also in-repo: [`data/` folder](https://github.com/fangxuuuuuu/mro-removal-prediction/tree/main/data) · [`outputs/metrics.md`](../outputs/metrics.md) (generated results) · [`outputs/example_alerts.md`](../outputs/example_alerts.md) (example alert cards)
+> - Dataset is deterministically regenerable via `python src/run_all.py` (seed 42).
+
 **Problem:** Predict whether an aircraft component will require an **unscheduled removal within the next 30 flight cycles**, so the MRO planning team can proactively stage parts and schedule removals during planned maintenance windows instead of reacting to AOG events.
 
 **Business constraint (from the assessment brief):** the operational alert budget is **at most 5 alerts per 100 active components per review window**, while detecting **at least 80% of actual removals**.
@@ -208,12 +214,27 @@ We treat drift as a **monitored, trigger-based process**, not a scheduled guess:
 
 ---
 
-## 8. Repository Map
+## 8. Repository Map & Submission
+
+**Code repository:** [github.com/fangxuuuuuu/mro-removal-prediction](https://github.com/fangxuuuuuu/mro-removal-prediction)
+
+**Mock dataset:** [Google Drive (CSV + data dictionary, 3.2 MB zip)](https://drive.google.com/file/d/1_sMO_Ce7rHH3VZfni8CRwUk4ODPWMjPh/view?usp=sharing) — also viewable in-repo at [`data/`](https://github.com/fangxuuuuuu/mro-removal-prediction/tree/main/data). Deterministically regenerable via `python src/run_all.py`.
+
+Deliverable mapping:
+
+| Brief requirement | Where |
+|---|---|
+| Data preparation & modeling approach | REPORT §1–§3, `src/prepare.py`, `src/features.py`, `src/train.py` |
+| Model evaluation & threshold selection | REPORT §4, `src/evaluate.py`, `outputs/metrics.md` |
+| Example predictions & explanations | REPORT §5/§9, `outputs/example_alerts.md`, `outputs/test_predictions.csv` |
+| Deployment & monitoring approach | REPORT §6 |
+| Limitations & future improvements | REPORT §7 |
+| Tests (leakage, as-of, budget) | `tests/test_pipeline.py` |
 
 ```
 mro-removal-prediction/
 ├── docs/REPORT.md          # this report
-├── data/                   # mock dataset (CSV) + packaging zip
+├── data/                   # data dictionary; CSV/zip distributed via Google Drive
 ├── src/
 │   ├── generate_data.py    # synthetic dataset generator (~2% positives)
 │   ├── prepare.py          # cleaning, missing data, outliers
@@ -221,9 +242,10 @@ mro-removal-prediction/
 │   ├── split.py            # temporal + group-disjoint split
 │   ├── train.py            # model comparison, training
 │   ├── evaluate.py         # metrics, threshold selection, alert budget
-│   └── explain.py          # global + local (SHAP) explanations
+│   ├── explain.py          # global + local (SHAP) explanations
+│   └── run_all.py          # end-to-end pipeline
 ├── tests/                  # pytest suite (leakage, as-of contract, budget)
-├── outputs/                # metrics tables, example alert cards
+├── outputs/                # metrics tables, example alert cards, predictions
 └── README.md               # how to run
 ```
 
